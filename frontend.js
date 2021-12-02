@@ -26,14 +26,13 @@ calculateShipping.onclick = () => {
             let data = JSON.parse(this.response)
 
             // Set the updated address
-            street1.innerText = data.address.addressLine1;
-            street2.innerText = data.address.addressLine2;
-            city.innerText = data.address.city;
-            state.innerText = data.address.state;
-            zip.innerText = data.address.zipCode;
+            street1.value = data.address.addressLine1;
+            street2.value = data.address.addressLine2;
+            city.value = data.address.city;
+            state.value = data.address.state;
+            zip.value = data.address.zipCode;
 
             // Set the shipping rates
-
         } else {
             console.log(`${this.status} - ${this.response}`);
         }
@@ -41,12 +40,12 @@ calculateShipping.onclick = () => {
     request.send(JSON.stringify({
         weight: 1,
         shipTo: {
-            name: name.innerText,
-            addressLine1: street1.innerText,
-            addressLine2: street2.innerText,
-            city: city.innerText,
-            state: state.innerText,
-            zipCode: zip.innerText,
+            name: name.value,
+            addressLine1: street1.value,
+            addressLine2: street2.value,
+            city: city.value,
+            state: state.value,
+            zipCode: zip.value,
         },
     }));
 }

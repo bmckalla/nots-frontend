@@ -1,7 +1,8 @@
 // button
+console.log('HERE!');
 let calculateShipping = document.getElementById('calculate-shipping');
 
-calculateShipping.onclick = function () {
+calculateShipping.onclick = () => {
     // text boxes
     let ratePrice = document.getElementById('rate-price');
     let totalPrice = document.getElementById('total-price');

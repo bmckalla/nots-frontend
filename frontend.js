@@ -19,21 +19,8 @@ calculateShipping.onclick = () => {
 
     let request = new XMLHttpRequest()
 
-    // Open a new connection, using the GET request on the URL endpoint
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
-    request.send(JSON.stringify({
-        weight: 1,
-        shipTo: {
-            name: name.innerText,
-            addressLine1: street1.innerText,
-            addressLine2: street2.innerText,
-            city: city.innerText,
-            state: state.innerText,
-            zipCode: zip.innerText,
-        },
-    }));
-
     request.onload = () => {
         if (this.status === 200) {
             let data = JSON.parse(this.response)
@@ -51,7 +38,15 @@ calculateShipping.onclick = () => {
             console.log(`${this.status} - ${this.response}`);
         }
     }
-
-    // Send request
-    request.send();
+    request.send(JSON.stringify({
+        weight: 1,
+        shipTo: {
+            name: name.innerText,
+            addressLine1: street1.innerText,
+            addressLine2: street2.innerText,
+            city: city.innerText,
+            state: state.innerText,
+            zipCode: zip.innerText,
+        },
+    }));
 }

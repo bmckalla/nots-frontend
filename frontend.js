@@ -4,6 +4,9 @@ let calculateShipping = document.getElementById('calculate-shipping');
 function createElement(tagName, attrs) {
   let elem = document.createElement(tagName);
   Object.assign(elem, attrs);
+  if ('class' in attrs) {
+      elem.setAttribute('class', attrs['class']);
+  }
   return elem
 }
 

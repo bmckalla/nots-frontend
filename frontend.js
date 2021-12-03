@@ -44,7 +44,9 @@ calculateShipping.onclick = function() {
             shippingMethods.innerHTML = '';
             data.rates.map(rate => {
                 let wrapper = createElement('div', {'class': 'shipping-method-container'});
-                wrapper.appendChild(createElement('input', {type: 'radio', id: rate.rateId}));
+                wrapper.appendChild(
+                    createElement('input', {type: 'radio', id: rate.rateId, name: 'shippingMethod'})
+                );
                 let label = createElement('label', {for: rate.rateId});
                 label.innerText = `${rate.provider} - $${rate.cost} - ~${rate.estimatedDays} days`;
                 wrapper.appendChild(label);

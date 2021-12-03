@@ -22,8 +22,8 @@ calculateShipping.onclick = () => {
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = () => {
-        if (this.status == 200) {
-            let data = JSON.parse(this.response)
+        if (request.status === 200) {
+            let data = JSON.parse(request.response)
 
             // Set the updated address
             street1.value = data.address.addressLine1;
@@ -34,7 +34,7 @@ calculateShipping.onclick = () => {
 
             // Set the shipping rates
         } else {
-            console.log(`${this.status} - ${this.response}`);
+            console.log(`${request.status} - ${request.response}`);
         }
     }
     request.send(JSON.stringify({

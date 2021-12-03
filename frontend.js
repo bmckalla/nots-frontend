@@ -1,5 +1,4 @@
 // button
-console.log('HERE!');
 let calculateShipping = document.getElementById('calculate-shipping');
 
 function createElement(tagName, attrs) {

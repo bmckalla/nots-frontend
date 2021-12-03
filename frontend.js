@@ -57,11 +57,11 @@ document.getElementById('calculate-shipping').onclick = function() {
                     'input',
                     {type: 'radio', id: rate.rateId, name: 'shippingMethod', class: 'shipping-method-radio'}
                 );
-                input.onclick = updateTotal(cost);
+                input.onclick = updateTotal(rate.cost);
                 wrapper.appendChild(input);
 
                 let label = createElement('label', {for: rate.rateId});
-                label.innerText = `${rate.provider} - $${rate.cost} - ~${rate.estimatedDays} days`;
+                label.innerText = `${rate.provider} - $ ${rate.cost} - ~${rate.estimatedDays} days`;
                 wrapper.appendChild(label);
 
                 shippingMethods.appendChild(wrapper);

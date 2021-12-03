@@ -22,7 +22,7 @@ calculateShipping.onclick = () => {
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = () => {
-        if (this.status === 200) {
+        if (this.status == 200) {
             let data = JSON.parse(this.response)
 
             // Set the updated address

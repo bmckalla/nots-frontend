@@ -2,7 +2,13 @@
 console.log('HERE!');
 let calculateShipping = document.getElementById('calculate-shipping');
 
-calculateShipping.onclick = () => {
+function createElement(tagName, attrs) {
+  let elem = document.createElement(tagName);
+  Object.assign(elem, attrs);
+  return elem
+}
+
+calculateShipping.onclick = function() {
     // text boxes
     let ratePrice = document.getElementById('rate-price');
     let totalPrice = document.getElementById('total-price');
@@ -21,7 +27,7 @@ calculateShipping.onclick = () => {
 
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
-    request.onload = () => {
+    request.onload = function() {
         if (request.status === 200) {
             let data = JSON.parse(request.response)
 
@@ -33,6 +39,19 @@ calculateShipping.onclick = () => {
             zip.value = data.address.zipCode;
 
             // Set the shipping rates
+            shippingMethods.innerHTML = '';
+            data.rates.map(rate => {
+                shippingMethods.appendChild(
+                    createElement(
+                        'input',
+                        {type: 'radio', id: rate.rateId}
+                    )
+                );
+                let label = createElement('label', {for: rate.rateId});
+                label.innerText = `${rate.provider} - ${rate.cost} - ${rate.estimatedDays}`;
+                shippingMethods.appendChild(label);
+                shippingMethods.appendChild(createElement('br'))
+            });
         } else {
             console.log(`${request.status} - ${request.response}`);
         }

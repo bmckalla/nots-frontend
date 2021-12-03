@@ -48,7 +48,7 @@ calculateShipping.onclick = function() {
                     )
                 );
                 let label = createElement('label', {for: rate.rateId});
-                label.innerText = `${rate.provider} - ${rate.cost} - ${rate.estimatedDays}`;
+                label.innerText = `${rate.provider} - $${rate.cost} - ~${rate.estimatedDays} days`;
                 shippingMethods.appendChild(label);
             });
         } else {

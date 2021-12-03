@@ -41,15 +41,12 @@ calculateShipping.onclick = function() {
             // Set the shipping rates
             shippingMethods.innerHTML = '';
             data.rates.map(rate => {
-                shippingMethods.appendChild(
-                    createElement(
-                        'input',
-                        {type: 'radio', id: rate.rateId}
-                    )
-                );
+                let wrapper = createElement('div', {class: 'shipping-method-container'});
+                wrapper.appendChild(createElement('input', {type: 'radio', id: rate.rateId}));
                 let label = createElement('label', {for: rate.rateId});
                 label.innerText = `${rate.provider} - $${rate.cost} - ~${rate.estimatedDays} days`;
-                shippingMethods.appendChild(label);
+                wrapper.appendChild(label);
+                shippingMethods.appendChild(wrapper);
             });
         } else {
             console.log(`${request.status} - ${request.response}`);

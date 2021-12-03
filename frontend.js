@@ -61,7 +61,7 @@ document.getElementById('calculate-shipping').onclick = function() {
                 wrapper.appendChild(input);
 
                 let label = createElement('label', {for: rate.rateId});
-                label.innerText = `${rate.provider} - $ ${rate.cost} - ~${rate.estimatedDays} days`;
+                label.innerText = `${rate.provider} | $ ${rate.cost} | ~${rate.estimatedDays} days`;
                 wrapper.appendChild(label);
 
                 shippingMethods.appendChild(wrapper);

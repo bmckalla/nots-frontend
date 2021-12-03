@@ -1,5 +1,3 @@
-// button
-let calculateShipping = document.getElementById('calculate-shipping');
 
 function createElement(tagName, attrs) {
   let elem = document.createElement(tagName);
@@ -10,10 +8,20 @@ function createElement(tagName, attrs) {
   return elem
 }
 
-calculateShipping.onclick = function() {
+function updateTotal(cost) {
+    function doUpdate() {
+        let subTotalPrice = document.getElementById('subtotal-price');
+        let ratePrice = document.getElementById('rate-price');
+        let totalPrice = document.getElementById('total-price');
+        ratePrice.innerText = `$ ${cost}`;
+        let subTotal = parseFloat(subTotalPrice.innerText.trim().replace('$', ''));
+        totalPrice.innerText = `$ ${parseFloat(cost) + subTotal}`;
+    }
+    return doUpdate
+}
+
+document.getElementById('calculate-shipping').onclick = function() {
     // text boxes
-    let ratePrice = document.getElementById('rate-price');
-    let totalPrice = document.getElementById('total-price');
     let name = document.getElementById('name');
     let street1 = document.getElementById('street1');
     let street2 = document.getElementById('street2');
@@ -23,12 +31,12 @@ calculateShipping.onclick = function() {
 
     // arrays?
     let shippingMethods = document.getElementById('shipping-methods');
-    let orders = document.getElementById('orders');
 
     let request = new XMLHttpRequest()
 
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
+
     request.onload = function() {
         if (request.status === 200) {
             let data = JSON.parse(request.response)
@@ -44,20 +52,25 @@ calculateShipping.onclick = function() {
             shippingMethods.innerHTML = '';
             data.rates.map(rate => {
                 let wrapper = createElement('div', {class: 'shipping-method-container'});
-                wrapper.appendChild(
-                    createElement(
-                        'input',
-                        {type: 'radio', id: rate.rateId, name: 'shippingMethod', class: 'shipping-method-radio'})
+
+                let input = createElement(
+                    'input',
+                    {type: 'radio', id: rate.rateId, name: 'shippingMethod', class: 'shipping-method-radio'}
                 );
+                input.onclick = updateTotal(cost);
+                wrapper.appendChild(input);
+
                 let label = createElement('label', {for: rate.rateId});
                 label.innerText = `${rate.provider} - $${rate.cost} - ~${rate.estimatedDays} days`;
                 wrapper.appendChild(label);
+
                 shippingMethods.appendChild(wrapper);
             });
         } else {
             console.log(`${request.status} - ${request.response}`);
         }
     }
+
     request.send(JSON.stringify({
         weight: 1,
         shipTo: {

@@ -74,12 +74,12 @@ document.getElementById('calculate-shipping').onclick = function() {
     request.send(JSON.stringify({
         weight: 1,
         shipTo: {
-            name: name.value,
-            addressLine1: street1.value,
-            addressLine2: street2.value,
-            city: city.value,
-            state: state.value,
-            zipCode: zip.value,
+            name: name.value || name.innerText,
+            addressLine1: street1.value || street1.innerText,
+            addressLine2: street2.value || street2.innerText,
+            city: city.value || city.innerText,
+            state: state.value || state.innerText,
+            zipCode: zip.value || zip.innerText,
         },
     }));
 }

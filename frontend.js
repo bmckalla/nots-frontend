@@ -8,14 +8,64 @@ function createElement(tagName, attrs) {
   return elem
 }
 
-function updateTotal(cost) {
+function updateTotal(rateId) {
     function doUpdate() {
-        let subTotalPrice = document.getElementById('subtotal-price');
-        let ratePrice = document.getElementById('rate-price');
-        let totalPrice = document.getElementById('total-price');
-        ratePrice.innerText = `$ ${cost}`;
-        let subTotal = parseFloat(subTotalPrice.innerText.trim().replace('$', ''));
-        totalPrice.innerText = `$ ${parseFloat(cost) + subTotal}`;
+        // TODO: Update this to make the request to add the sku to the order
+        // Also need to remove other rates if one is already selected
+        // i.e. ecommerceUpdateCartItem -> ecommerceAddToCart -> ecommerceRecalcEstimations
+        let rates = document.getElementsByClassName('shipping-method-radio');
+        let newRate = document.getElementById(rateId);
+
+        let requests = rates.map(function(rate) {
+            return {
+                operationName: 'CheckoutAddShipping',
+                query: `
+                   mutation CheckoutAddShipping($sku: String, $count: Int) {
+                      ecommerceUpdateCartItem(sku: $sku, count: $count) {
+                        ok
+                        __typename
+                      }
+                    }
+                `,
+                variables: {sku: rate.sku, count: 0}
+            }
+        });
+        requests.push({
+            operationName: 'CheckoutAddShipping',
+            query: `
+               mutation CheckoutAddShipping($sku: String, $count: Int) {
+                  ecommerceAddToCart(sku: $sku, count: $count) {
+                    ok
+                    __typename
+                  }
+                }
+            `,
+            variables: {sku: newRate.sku, count: 1}
+        });
+        requests.push({
+            operationName: 'CheckoutAddShipping',
+            query: `
+               mutation CheckoutAddShipping() {
+                  ecommerceRecalcEstimations() {
+                    ok
+                    __typename
+                  }
+                }
+            `,
+            variables: {}
+        });
+
+        let request = new XMLHttpRequest();
+        request.open('POST', `${window.location.origin}/.wf_graphql/apollo`);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify(requests));
+
+        // let subTotalPrice = document.getElementById('subtotal-price');
+        // let ratePrice = document.getElementById('rate-price');
+        // let totalPrice = document.getElementById('total-price');
+        // ratePrice.innerText = `$ ${cost}`;
+        // let subTotal = parseFloat(subTotalPrice.innerText.trim().replace('$', ''));
+        // totalPrice.innerText = `$ ${parseFloat(cost) + subTotal}`;
     }
     return doUpdate
 }
@@ -32,7 +82,7 @@ document.getElementById('calculate-shipping').onclick = function() {
     // arrays?
     let shippingMethods = document.getElementById('shipping-methods');
 
-    let request = new XMLHttpRequest()
+    let request = new XMLHttpRequest();
 
     request.open('POST', 'https://us-central1-nots-backend-dev.cloudfunctions.net/widgets/shipping/estimate');
     request.setRequestHeader('Content-Type', 'application/json');
@@ -55,9 +105,16 @@ document.getElementById('calculate-shipping').onclick = function() {
 
                 let input = createElement(
                     'input',
-                    {type: 'radio', id: rate.rateId, name: 'shippingMethod', class: 'shipping-method-radio'}
+                    {
+                        type: 'radio',
+                        id: rate.rateId,
+                        name: 'shippingMethod',
+                        class: 'shipping-method-radio',
+                        sku: rate.sku,
+                        cost: rate.cost
+                    }
                 );
-                input.onclick = updateTotal(rate.cost);
+                input.onclick = updateTotal(rate.id);
                 wrapper.appendChild(input);
 
                 let label = createElement('label', {for: rate.rateId});

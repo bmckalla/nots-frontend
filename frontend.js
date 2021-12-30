@@ -21,7 +21,7 @@ function updateTotal(rateId) {
             requests.push({
                 operationName: 'CheckoutAddShipping',
                 query: `
-                   mutation CheckoutAddShipping($sku: String, $count: Int) {
+                   mutation CheckoutAddShipping($sku: String!, $count: Int!) {
                       ecommerceUpdateCartItem(sku: $sku, count: $count) {
                         ok
                         __typename
@@ -34,7 +34,7 @@ function updateTotal(rateId) {
         requests.push({
             operationName: 'CheckoutAddShipping',
             query: `
-               mutation CheckoutAddShipping($sku: String, $count: Int) {
+               mutation CheckoutAddShipping($sku: String!, $count: Int!) {
                   ecommerceAddToCart(sku: $sku, count: $count) {
                     ok
                     __typename
@@ -46,7 +46,7 @@ function updateTotal(rateId) {
         requests.push({
             operationName: 'CheckoutAddShipping',
             query: `
-               mutation CheckoutAddShipping() {
+               mutation CheckoutAddShipping {
                   ecommerceRecalcEstimations() {
                     ok
                     __typename

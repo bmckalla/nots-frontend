@@ -17,7 +17,7 @@ function updateTotal(rateId) {
         let newRate = document.getElementById(rateId);
         const requests = [];
 
-        for (let i = 0; i < rates.length; i++) {
+        for (const rate of rates) {
             requests.push({
                 operationName: 'CheckoutAddShipping',
                 query: `

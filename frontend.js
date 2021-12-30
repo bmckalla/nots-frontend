@@ -15,9 +15,10 @@ function updateTotal(rateId) {
         // i.e. ecommerceUpdateCartItem -> ecommerceAddToCart -> ecommerceRecalcEstimations
         let rates = document.getElementsByClassName('shipping-method-radio');
         let newRate = document.getElementById(rateId);
+        const requests = [];
 
-        let requests = rates.map(function(rate) {
-            return {
+        for (let i = 0; i < rates.length; i++) {
+            requests.push({
                 operationName: 'CheckoutAddShipping',
                 query: `
                    mutation CheckoutAddShipping($sku: String, $count: Int) {
@@ -28,8 +29,8 @@ function updateTotal(rateId) {
                     }
                 `,
                 variables: {sku: rate.sku, count: 0}
-            }
-        });
+            })
+        }
         requests.push({
             operationName: 'CheckoutAddShipping',
             query: `
@@ -128,6 +129,7 @@ document.getElementById('calculate-shipping').onclick = function() {
         }
     }
 
+    // TODO: how do we add weight?
     request.send(JSON.stringify({
         weight: 1,
         shipTo: {

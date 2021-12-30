@@ -59,6 +59,7 @@ function updateTotal(rateId) {
         let request = new XMLHttpRequest();
         request.open('POST', `${window.location.origin}/.wf_graphql/apollo`);
         request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('X-Wf-CSRF', getCookie()['wf-csrf:']);
         request.send(JSON.stringify(requests));
 
         // let subTotalPrice = document.getElementById('subtotal-price');
@@ -69,6 +70,14 @@ function updateTotal(rateId) {
         // totalPrice.innerText = `$ ${parseFloat(cost) + subTotal}`;
     }
     return doUpdate
+}
+
+function getCookie() {
+    return document.cookie.split(';').reduce((cookies, cookie) => {
+      const [ name, value ] = cookie.split('=').map(c => c.trim());
+      cookies[name] = value;
+      return cookies;
+    }, {});
 }
 
 document.getElementById('calculate-shipping').onclick = function() {

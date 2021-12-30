@@ -59,7 +59,7 @@ function updateTotal(rateId) {
         let request = new XMLHttpRequest();
         request.open('POST', `${window.location.origin}/.wf_graphql/apollo`);
         request.setRequestHeader('Content-Type', 'application/json');
-        request.setRequestHeader('X-Wf-CSRF', getCookie()['wf-csrf:']);
+        request.setRequestHeader('X-Wf-CSRF', getCookie()['wf-csrf']);
         request.send(JSON.stringify(requests));
 
         // let subTotalPrice = document.getElementById('subtotal-price');

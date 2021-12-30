@@ -115,7 +115,7 @@ document.getElementById('calculate-shipping').onclick = function() {
                         cost: rate.cost
                     }
                 );
-                input.onclick = updateTotal(rate.id);
+                input.onclick = updateTotal(rate.rateId);
                 wrapper.appendChild(input);
 
                 let label = createElement('label', {for: rate.rateId});
